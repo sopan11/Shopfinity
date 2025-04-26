@@ -14,7 +14,8 @@ DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 # ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = [
     'shopfinity-g55q.onrender.com',
-    'shopfinity-2pyd.onrender.com',  # <- Add this
+    'shopfinity-2pyd.onrender.com',
+    'shopfinity-zlnc.onrender.com',  # <- Add this
     'localhost',
     '127.0.0.1'
 ]
