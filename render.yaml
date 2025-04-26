@@ -2,7 +2,7 @@ services:
   - type: web
     name: shopfinity
     env: python
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn Shopfinity.wsgi:application"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
