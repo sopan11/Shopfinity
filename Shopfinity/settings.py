@@ -11,7 +11,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-dev-secret-key')
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 # Add your actual domain or IP here (e.g., your Heroku domain or PythonAnywhere)
-ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'shopfinity-g55q.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 # Application definition
 INSTALLED_APPS = [
