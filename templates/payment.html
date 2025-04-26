@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center">Payment Gateway</h2>
+  <p class="text-center">Enter any details and click Pay Now to simulate payment.</p>
+
+  <form action="/payment/success/" method="POST" class="col-md-6 offset-md-3 mt-4">
+    {% csrf_token %}
+
+    <input type="hidden" name="order_id" value="{{ order.order_id }}">
+    <div class="mb-3">
+      <label for="card" class="form-label">Card Number</label>
+      <input type="text" id="card" class="form-control" required placeholder="1234 5678 9012 3456">
+    </div>
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Cardholder Name</label>
+      <input type="text" id="name" class="form-control" required placeholder="John Doe">
+    </div>
+
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <input type="text" class="form-control" value="₹{{ amount }}" disabled>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Pay Now</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock title %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title class='text-dark'>My Orders - Shopfinity</title>
+</head>
+<body>
+    <div class='container'>
+
+        <h1 class="py-5" >My Order History</h1>
+        {% if orders %}
+        <div class="container table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>SNo.</th>
+                        <th>Product Name</th>
+                        <th>Total Amount</th>
+                        <th>Order Status</th>
+                        <th>Payment Status</th>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Pay</th>
+                        <th>Cancel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ order.items_json }}</td>
+                        <td>₹{{ order.amount }}</td>
+                        <td>{{ order.orderStatus|title }}</td>
+                        <td>{{ order.paymentstatus|title }}</td>
+                        <td>
+                            {{ order.address1 }}, {{ order.address2 }}<br>
+                            {{ order.city }}, {{ order.state }} - {{ order.zip_code }}
+                        </td>
+                        <td>{{ order.date|date:"M d, Y H:i" }}</td>
+                        {% if order.paymentstatus == 'pending' %}
+                        <td>
+                            <form action="{% url 'payment' order_id=order.order_id %}" method="GET">
+                                {% csrf_token %}
+                                <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                <button type="submit" class="btn btn-success">Pay</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'delete_order' order_id=order.order_id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Cancel</button>
+                            </form>
+                        </td>
+                        {% else %}
+                        <td></td>
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+    {% else %}
+        <p>You haven't placed any orders yet.</p>
+    {% endif %}
+</div>
+</body>
+</html>
+
+{% endblock content %}

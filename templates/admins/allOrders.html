@@ -1,0 +1,73 @@
+{% extends "admins/admin_base.html" %}
+{% block title %}All Orders{% endblock title %}
+{% block content %}
+<div class="container mt-4">
+  <h2>All Orders</h2>
+
+  {% if combined_data %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Order ID</th>
+          <th>User</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Amount</th>
+          <th>Items</th>
+          <th>Address</th>
+          <th>Date</th>
+          <th>Updates</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for data in combined_data %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ data.order.order_id }}</td>
+          <td>{{ data.order.user.username }}</td>
+          <td>{{ data.order.orderStatus }}</td>
+          <td>{{ data.order.paymentstatus }}</td>
+          <td>₹{{ data.order.amount }}</td>
+          <td>{{ data.order.items_json }}</td>
+          <td>
+            {{ data.order.address1 }}, {{ data.order.address2 }}<br>
+            {{ data.order.city }}, {{ data.order.state }} - {{ data.order.zip_code }}
+          </td>
+          <td>{{ data.order.date|date:"M d, Y H:i" }}</td>
+          <td>
+            {% if data.updates %}
+            <ul>
+              {% for update in data.updates %}
+              <li>{{ update.update_desc }}</small></li>
+              {% if update.new_update_desc != "" %}
+              <li>{{ update.new_update_desc }}</li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No updates available.</p>
+            {% endif %}
+          </td>
+          <td>
+            {% if data.order.orderStatus == 'Not Delivered' %}
+              <form action="{% url 'mark_order_delivered' data.order.order_id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger p-2">Checkout</button>
+              </form>
+            {% else %}
+              <span class="badge bg-success p-2">Delivered</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>No orders found.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'admins/admin_base.html' %}
+{% load static %}
+{% block title %}Add Product{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Add New Product</h2>
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
+      <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+
+        <script>
+          setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+              let bsAlert = bootstrap.Alert.getOrCreateInstance(alert); 
+              bsAlert.close();
+            });
+          }, 1000);
+        </script>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <input type="text" name="product_name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <input type="text" name="category" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="sub_category" class="form-label">Sub Category</label>
+            <input type="text" name="sub_category" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" name="price" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="desc" class="form-label">Description</label>
+            <textarea name="desc" rows="3" class="form-control" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Product Image</label>
+            <input type="file" name="image" class="form-control" required>
+        </div>
+        <span class="text-start mb-3 me-3">
+        <a href="/shopfinity/adm/all-products" class="btn btn-primary">Back</a>
+        </span>
+        <span class="text-end mb-3 me-3">
+        <button type="submit" class="btn btn-success">Add Product</button>
+        </span>
+
+    </form>
+</div>
+{% endblock %}

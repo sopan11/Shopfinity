@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock title %}
+{% block content %}
+<div class='container'>
+
+  <div class="card bg-dark p-5 text-light border-light">
+      
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
+      <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+
+        <script>
+          setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+              let bsAlert = bootstrap.Alert.getOrCreateInstance(alert); 
+              bsAlert.close();
+            });
+          }, 1000);
+        </script>
+        <h3 class="text-light">Update Profile</h3>
+        
+        <form action="/profile" method="POST">
+    {% csrf_token %}
+    <br>
+      <lable for="fName">First Name</lable>
+      <div class='form-group'>
+        <input type="text" value="{{user.first_name}}" class='form-control' id='first_name' name='first_name' required>
+      </div>
+
+      <lable for="lName">Last Name</lable>
+      <div class='form-group'>
+        <input type="text" value="{{user.last_name}}" class='form-control' id='last_name' name='last_name' required>
+      </div>
+      
+      <lable for="username">Username</lable>
+      <div class='form-group'>
+        <input type="text" class='form-control' id='username' value="{{user.username}}" name='username' required>
+      </div>
+
+      <br>
+      <button type="submit" class='btn btn-primary m-2'>Update</button>
+      <br>
+</div>
+</div>
+{% endblock content %}

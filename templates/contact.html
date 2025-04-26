@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock title %}
+
+{% block content %}
+<div class='container'>
+  <div class="card bg-dark p-5 text-light border-light">
+    <h3>Contact Us</h3>
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
+      <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+
+        <script>
+          setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+              let bsAlert = bootstrap.Alert.getOrCreateInstance(alert); 
+              bsAlert.close();
+            });
+          }, 1000);
+        </script>
+            <div class='container'>
+                <form action="/contact" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <lable for="name">Full Name</lable>
+                  <div class='form-group'>
+                    <input type="text" class='form-control' id='name' name='name' required>
+                  </div>
+
+                  <lable for="email">Email</lable>
+                  <div class='form-group'>
+                    <input type="email" class='form-control' id='email' name='email' value="{{user.email}}" required>
+                  </div>
+                  
+                  <lable for="desc">Description</lable>
+                  <div class='form-group'>
+                    <textarea type="text" class='form-control' id='desc' name='desc' required ></textarea>
+                  </div>
+                  
+                  <lable for="mobNo">Mobile Number</lable>
+                  <div class='form-group'>
+                    <input type="number" class='form-control' id='mobNo' name='mobNo' required>
+                  </div>
+                  <br>
+                  <button type="submit" class='btn btn-primary m-2'>Submit</button>
+                  <br>
+
+{% endblock content %}

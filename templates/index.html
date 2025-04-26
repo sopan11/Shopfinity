@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}home{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <h1>Welcome to Shopfinity</h1>
+  </div>
+{% endblock content %}
+
+{% block body %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show text-center" role="alert">
+      <strong>{{ message }}</strong>
+    </div>
+    {% endfor %}
+
+        <script>
+          setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+              let bsAlert = bootstrap.Alert.getOrCreateInstance(alert); 
+              bsAlert.close();
+            });
+          }, 1000);
+        </script>
+{% load static %}
+  <section id="portfolio" class="portfolio section">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Welcome to Shopfinity</h2>
+      <p><span>Check Our</span> <span class="description-title">Products </span></p>
+    </div>
+
+    {% for product, range, nSlides in allProds %}
+    <div class="container border border-danger border-2 py-4 my-3">
+      
+      <div class="">
+        <h2 class="container text-center text-success">{{product.0.category}}</h2>
+      </div>
+      <div class="container">
+        <div class="row">
+          {% for i in product %}
+            <div class="col-md-3 mt-3">
+              <img src="/media/{{i.image}}" class="card-img-top" alt="" height="270px">
+              <div class="card-body">
+                <h5 class="card-title" id="namepr{{i.id}}">{{i.product_name}}</h5>
+                <p class="card-text">{{i.desc|slice:':50'}}...</p>
+                <h6 class="card-title">Price:<span id="pricepr{{i.id}}">{{i.price}}</span></h6>
+                {% if request.user.is_authenticated %}
+                <span id="divpr{{i.id}}" class="divpr">
+                  <button class="btn btn-success cart btn-sm mt-0" data-product-id="{{i.id}}">Add To Cart</button>
+                </span>
+                {% endif %}
+                <a href="/media/{{i.image}}"><button class="btn btn-dark btn-sm cart">View</button></a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  
+  <script>
+    $(document).ready(function() {
+      $(".cart").click(function() {
+        var productId = $(this).data("product-id");
+        
+        $.ajax({
+          url: "{% url 'cart:add_to_cart' 0 %}".replace('0', productId), 
+              type: "POST",
+              data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+              },
+              success: function(response) {
+                if (response.message) {
+                  alert(response.message);
+                } else if (response.error) {
+                      alert(response.error);
+                    }
+                  },
+                  error: function(response) {
+                    alert("There was an error adding the product to the cart.");
+              }
+            });
+          });
+        });
+  </script>
+{% endblock %}
